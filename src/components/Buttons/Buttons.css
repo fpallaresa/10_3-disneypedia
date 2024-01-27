@@ -4,6 +4,7 @@
     align-items: center;
     width: 100%;
     max-width: 350px;
+    margin: 20px 0px;
 }
 
 .characters__button {
@@ -14,8 +15,32 @@
     border-radius:5px;
     text-transform: uppercase;
     font-size: 16px;
+    cursor:pointer;
+}
+
+.characters__button:hover{
+    background-color: #a3a3a3;
+    color:#2f3030;
+}
+
+button[disabled=disabled], button:disabled {
+    background-color: #656565;
+    cursor: unset;
+}
+
+button[disabled=disabled]:hover, button:disabled:hover {
+    background-color: #656565;
+    cursor: unset;
+}
+
+.characters__button--disabled:hover {
+    background-color: #656565;
+    cursor: unset;
 }
 
 .characters__page {
     color:white;
+    font-weight: 700;;
+    font-size: 22px;
 }
+

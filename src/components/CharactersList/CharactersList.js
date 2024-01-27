@@ -1,83 +1,71 @@
+import React from "react";
+import CharactersCard from '../CharactersCard/CharactersCard';
+import CharacterDetail from '../CharacterDetail/CharacterDetail';
+import Buttons from '../Buttons/Buttons';
+import Loading from '../Loading/Loading';
 import './CharactersList.css'
 
+const API_URL = "https://api.disneyapi.dev/character?page=";
+
 const CharactersList = () => {
+    const [charactersList, setCharactersList] = React.useState([]);
+    const [page, setPage] = React.useState(1);
+    const [previousPage, setPreviousPage] = React.useState(null);
+    const [nextPage, setNextPage] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [selectedCharacter, setSelectedCharacter] = React.useState(null);
+
+    React.useEffect(() => {
+        setLoading(true);
+        fetch(`${API_URL}${page}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setCharactersList(data.data);
+                setPreviousPage(data.info.previousPage);
+                setNextPage(data.info.nextPage);
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.error('Error accediendo a los datos:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [page]);
+
+    const goBack = () => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    };
+
+    const goForward = () => {
+        setPage(page + 1);
+    };
+
+    const handleCharacterClick = (character) => {
+        setSelectedCharacter(character);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedCharacter(null); 
+    };
 
     return (
+        <> 
+            {loading && <Loading></Loading>}
+            {selectedCharacter && <CharacterDetail character={selectedCharacter} onClose={handleCloseModal} />}
+            <Buttons 
+                pageNumber={page} 
+                goBack={goBack} 
+                goForward={goForward} 
+                previousPage={previousPage} 
+                nextPage={nextPage}
+            />
+            
+            <CharactersCard charactersList={charactersList} onCharacterClick={handleCharacterClick} />
 
-        <div className='characters'>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/7/77/9-eye.jpg' alt=''></img>
-                <p className='characters__title'>9-Eye</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/8/80/Profile_-_627.png' alt=''></img>
-                <p className='characters__title'>627</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/7/77/9-eye.jpg' alt=''></img>
-                <p className='characters__title'>9-Eye</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/8/80/Profile_-_627.png' alt=''></img>
-                <p className='characters__title'>627</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/7/77/9-eye.jpg' alt=''></img>
-                <p className='characters__title'>9-Eye</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/8/80/Profile_-_627.png' alt=''></img>
-                <p className='characters__title'>627</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/7/77/9-eye.jpg' alt=''></img>
-                <p className='characters__title'>9-Eye</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/8/80/Profile_-_627.png' alt=''></img>
-                <p className='characters__title'>627</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/8/80/Profile_-_627.png' alt=''></img>
-                <p className='characters__title'>627</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-            <div className='characters__card'>
-                <img className='characters__picture' src='https://static.wikia.nocookie.net/disney/images/3/3f/90%27s_Adventure_Bear_profile.png' alt=''></img>
-                <p className='characters__title'>90's Adventure Bear</p>
-            </div>
-        </div>
+        </>
     );
 }
 
